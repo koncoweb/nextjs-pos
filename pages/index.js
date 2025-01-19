@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react';
+// This app created by Koncoweb
+
+    import { useState, useEffect } from 'react';
+    import Link from 'next/link';
+    import { FaBars } from 'react-icons/fa';
 
     const Home = () => {
       const [items, setItems] = useState([
@@ -8,8 +12,6 @@ import { useState, useEffect } from 'react';
       ]);
       const [cart, setCart] = useState([]);
       const [sidebarOpen, setSidebarOpen] = useState(false);
-      const [newItemName, setNewItemName] = useState('');
-      const [newItemPrice, setNewItemPrice] = useState('');
 
       useEffect(() => {
         const storedItems = JSON.parse(localStorage.getItem('items')) || items;
@@ -23,10 +25,6 @@ import { useState, useEffect } from 'react';
         localStorage.setItem('cart', JSON.stringify(cart));
       }, [items, cart]);
 
-      const addItem = (item) => {
-        setItems([...items, item]);
-      };
-
       const addToCart = (item) => {
         setCart([...cart, item]);
       };
@@ -35,47 +33,25 @@ import { useState, useEffect } from 'react';
         setSidebarOpen(!sidebarOpen);
       };
 
-      const handleAddNewItem = () => {
-        if (newItemName && newItemPrice) {
-          const newItem = { name: newItemName, price: parseFloat(newItemPrice) };
-          addItem(newItem);
-          setNewItemName('');
-          setNewItemPrice('');
-        }
-      };
-
       return (
         <div className="flex">
-          <button onClick={toggleSidebar} className="p-2 bg-blue-500 text-white rounded m-4">Toggle Sidebar</button>
+          <button onClick={toggleSidebar} className="p-2 bg-blue-500 text-white rounded m-4">
+            <FaBars />
+          </button>
           <div className={`sidebar ${sidebarOpen ? 'open' : ''} bg-gray-100 p-4 w-64 h-screen fixed top-0 left-0 transition-transform duration-300 ease-in-out transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <h2 className="text-xl font-bold mb-4">Sidebar</h2>
             <ul>
-              {items.map((item, index) => (
-                <li key={index} className="mb-2">
-                  {item.name} - ${item.price.toFixed(2)}
-                  <button onClick={() => addToCart(item)} className="ml-2 bg-green-500 text-white p-1 rounded">Add to Cart</button>
-                </li>
-              ))}
+              <li className="mb-2">
+                <Link href="/" legacyBehavior>
+                  <a className="text-blue-500">Home</a>
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link href="/products" legacyBehavior>
+                  <a className="text-blue-500">Products</a>
+                </Link>
+              </li>
             </ul>
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Add New Item</h3>
-              <input
-                type="text"
-                placeholder="Item Name"
-                value={newItemName}
-                onChange={(e) => setNewItemName(e.target.value)}
-                className="w-full p-1 mb-2 border border-gray-300 rounded"
-              />
-              <input
-                type="number"
-                step="0.01"
-                placeholder="Item Price"
-                value={newItemPrice}
-                onChange={(e) => setNewItemPrice(e.target.value)}
-                className="w-full p-1 mb-2 border border-gray-300 rounded"
-              />
-              <button onClick={handleAddNewItem} className="bg-blue-500 text-white p-1 rounded">Add Item</button>
-            </div>
           </div>
           <div className="content p-4 w-full ml-64">
             <h1 className="text-2xl font-bold mb-4">Point of Sale App</h1>
